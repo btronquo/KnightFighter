@@ -3,54 +3,89 @@
 <head>
     <title>The knight Battle</title>
     <script src="https://npmcdn.com/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
     <link rel="stylesheet" href="css/foundation.min.css">
     <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
 <div id="app">
     <section class="row">
+        <h1 class="text-center animated bounce">{{ title }}</h1>
+    </section>
+    <section class="row" v-if="show">
         <div class="small-6 columns">
             <h1 class="text-center">Me</h1>
-            <p class="text-center"><img src="./img/me.png" alt="Me"></p>
+            <p class="text-center"><img src="./img/me.png" alt="Me" class="animated fadeIn"></p>
             <div class="healthbar">
-                <div class="healthbar text-center" style="background-color: green; margin: 0; color: white;">
-
+                <div class="healthbar text-center health">
+                    <strong>{{ lifeMe }}</strong>
                 </div>
             </div>
         </div>
         <div class="small-6 columns">
             <h1 class="text-center">Dark Knight</h1>
-            <p class="text-center"><img src="./img/knight.png" alt="Me"></p>
+            <p class="text-center"><img src="./img/knight.png" alt="Me" class="animated fadeIn"></p>
             <div class="healthbar">
-                <div class="healthbar text-center" style="background-color: green; margin: 0; color: white;">
-
+                <div class="healthbar text-center health" :style="{ width: lifebarKnight }">
+                    <strong>{{ lifeKnight }}</strong>
                 </div>
             </div>
         </div>
     </section>
-    <section class="row controls">
+    <section class="row controls" v-if="!show">
         <div class="small-12 columns">
-            <button id="start-game">START NEW GAME</button>
+            <button id="start-game" @click="show = true">START NEW GAME</button>
         </div>
     </section>
-    <section class="row controls">
-        <div class="small-12 columns">
-            <button id="attack">ATTACK</button>
-            <button id="special-attack">SPECIAL ATTACK</button>
-            <button id="heal">HEAL</button>
-            <button id="give-up">GIVE UP</button>
+        <div v-if="show">
+            <section class="row controls">
+                <div class="small-12 columns">
+                    <button id="attack" @click="attack">ATTACK</button>
+                    <button id="special-attack">SPECIAL ATTACK</button>
+                    <button id="heal">HEAL</button>
+                    <button id="give-up">GIVE UP</button>
+                </div>
+            </section>
+            <section class="row log">
+                <div class="small-12 columns">
+                    <p>History</p>
+                    <ul>
+                        <li v-for="(log, i) in logs">
+                                {{ i }} - {{ log }}
+                        </li>
+                    </ul>
+                </div>
+            </section>
         </div>
-    </section>
-    <section class="row log">
-        <div class="small-12 columns">
-            <ul>
-                <li>
-
-                </li>
-            </ul>
-        </div>
-    </section>
     <p align="center">Icons by <a href="https://www.flaticon.com/authors/freepik">Freepik</a> on www.flaticon.com</p>
 </div>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            title: 'The Knight Battle!',
+            lifeKnight: 100,
+            lifeMe: '100%',
+            show: false,
+            width: 100,
+            logs: ["I attacked the knight!", "I do nothing :/ Sorry"]
+        },
+        computed: {
+            lifebarKnight: function() {
+                return this.width
+            }
+        },
+        methods: {
+            attack: function() {
+                var randomNum = Math.floor(Math.random() * Math.floor(8) + 1);
+                this.lifeKnight = this.lifeKnight - randomNum
+                this.width= this.lifeKnight + '%';
+                this.logs.push("I attacked the Knight! He takes " + randomNum + " of dammages")
+                console.log('I attacked the knight. Knight: ' + this.lifeKnight + ' Me: ' + this.lifeMe)
+            }
+        }
+    })
+</script>
 </body>
 </html>
