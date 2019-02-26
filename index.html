@@ -15,7 +15,7 @@
     <section class="row" v-if="show">
         <div class="small-6 columns">
             <h1 class="text-center">Me</h1>
-            <p class="text-center"><img src="./img/me.png" alt="Me" class="animated fadeIn"></p>
+            <p class="text-center"><img src="./img/me.png" alt="Me" class="me animated"></p>
             <div class="healthbar">
                 <div class="healthbar text-center health" :style="{ width: lifebarMe }">
                     <strong>{{ lifeMe }}</strong>
@@ -24,7 +24,7 @@
         </div>
         <div class="small-6 columns">
             <h1 class="text-center">Dark Knight</h1>
-            <p class="text-center"><img src="./img/knight.png" alt="Me" class="animated fadeIn"></p>
+            <p class="text-center"><img src="./img/knight.png" alt="Me" class="knight animated"></p>
             <div class="healthbar">
                 <div class="healthbar text-center health" :style="{ width: lifebarKnight }">
                     <strong>{{ lifeKnight }}</strong>
@@ -99,7 +99,7 @@
                 this.lifeKnight = this.lifeKnight - randomNum
                 this.width = this.lifeKnight + '%';
                 this.logs.push("I attacked the Knight! He takes " + randomNum + " of dammages")
-                console.log('I attacked the knight. Knight: ' + this.lifeKnight + ' Me: ' + this.lifeMe)
+                this.animate('knight', 'shake')
                 this.attackMe()
             },
             attackMe: function() {
@@ -107,6 +107,7 @@
                 this.lifeMe = this.lifeMe - randomNum
                 this.widthMe = this.lifeMe + '%';
                 this.logs.push("Outch I receive " + randomNum + " of dammages!")
+                this.animate('me', 'shake')
             },
             specialAttack: function() {
                 var luckyNumber = Math.floor(Math.random() * Math.floor(3))
@@ -114,6 +115,7 @@
                 if(luckyNumber === 1){
                     this.lifeKnight = this.lifeKnight - randomAttack
                     this.logs.push("LEROOOOY JENKKKIIIINS! The Knight takes " + randomAttack + " of dammages !!")
+                    this.animate('knight', 'shake')
                 }else {
                     alert('Try again..')
                     this.logs.push("The special attack doesn't worked well... :(")
@@ -124,7 +126,7 @@
                 if(this.lifeMe < 100){
                     this.lifeMe = this.lifeMe + randomNum
                     this.logs.push("I heal myself by " + randomNum)
-                    this.attackMe()
+                    this.animate('me', 'pulse')
                 }else{
                     alert('You don\'t need heal..')
                 }
@@ -142,8 +144,14 @@
                 } else {
                     this.isDisabled = true
                 }
+            },
+            animate(name, animation) {
+                let elem = document.querySelector('.' + name)
+                if (!elem.classList.contains(animation)) {
+		            elem.classList.add(animation)
+                }
+	            setTimeout(() => { elem.classList.remove(animation) }, 1000)
             }
-
         }
     })
 </script>
