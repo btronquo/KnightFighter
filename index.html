@@ -17,7 +17,7 @@
             <h1 class="text-center">Me</h1>
             <p class="text-center"><img src="./img/me.png" alt="Me" class="animated fadeIn"></p>
             <div class="healthbar">
-                <div class="healthbar text-center health">
+                <div class="healthbar text-center health" :style="{ width: lifebarMe }">
                     <strong>{{ lifeMe }}</strong>
                 </div>
             </div>
@@ -66,23 +66,34 @@
         data: {
             title: 'The Knight Battle!',
             lifeKnight: 100,
-            lifeMe: '100%',
+            lifeMe: '100',
             show: false,
-            width: 100,
-            logs: ["I attacked the knight!", "I do nothing :/ Sorry"]
+            width: 100 + '%',
+            widthMe: 100 + '%',
+            logs: []
         },
         computed: {
             lifebarKnight: function() {
                 return this.width
+            },
+            lifebarMe: function() {
+                return this.widthMe
             }
         },
         methods: {
             attack: function() {
-                var randomNum = Math.floor(Math.random() * Math.floor(8) + 1);
+                var randomNum = Math.floor(Math.random() * Math.floor(8) + 1)
                 this.lifeKnight = this.lifeKnight - randomNum
-                this.width= this.lifeKnight + '%';
+                this.width = this.lifeKnight + '%';
                 this.logs.push("I attacked the Knight! He takes " + randomNum + " of dammages")
                 console.log('I attacked the knight. Knight: ' + this.lifeKnight + ' Me: ' + this.lifeMe)
+                this.attackMe()
+            },
+            attackMe: function() {
+                var randomNum = Math.floor(Math.random() * Math.floor(8) + 1)
+                this.lifeMe = this.lifeMe - randomNum
+                this.widthMe = this.lifeMe + '%';
+                this.logs.push("Outch I receive " + randomNum + " of dammages!")
             }
         }
     })
